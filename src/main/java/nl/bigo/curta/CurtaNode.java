@@ -13,7 +13,7 @@ public class CurtaNode extends SimpleNode implements CurtaParserTreeConstants {
     public CurtaNode(int type) {
         super(type);
         this.treeType = type;
-		this.options = new HashMap<String, Object>();
+		this.options = new HashMap<>();
     }
 
     public Object eval(Map<String, Object> vars, Map<String, Function> functions, Map<Integer, Expression> expressions) {

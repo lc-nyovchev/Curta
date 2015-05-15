@@ -14,9 +14,9 @@ public abstract class ExpressionTestBase {
     
     public ExpressionTestBase() {
         
-        functions = new LinkedHashMap<String, Function>();
-        variables = new LinkedHashMap<String, Object>();
-        expressions = new LinkedHashMap<Integer, Expression>();
+        functions = new LinkedHashMap<>();
+        variables = new LinkedHashMap<>();
+        expressions = new LinkedHashMap<>();
 
         variables.put("PI", Math.PI);
         variables.put("E", Math.E);

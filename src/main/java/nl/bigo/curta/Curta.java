@@ -18,9 +18,9 @@ public class Curta {
 	public static final String OPTION_FAIL_ON_UNKNOWN_VARIABLE = "OPTION_FAIL_ON_UNKNOWN_VARIABLE";
 	public static final Boolean OPTION_DEFAULT_FAIL_ON_UKNOWN_VARIABLE = Boolean.TRUE;
 
-    private static final Map<String, Function> DEFAULT_FUNCTIONS = new LinkedHashMap<String, Function>();
-    private static final Map<String, Object> DEFAULT_VARIABLES = new LinkedHashMap<String, Object>();
-    private static final Map<Integer, Expression> DEFAULT_EXPRESSIONS = new LinkedHashMap<Integer, Expression>();
+    private static final Map<String, Function> DEFAULT_FUNCTIONS = new LinkedHashMap<>();
+    private static final Map<String, Object> DEFAULT_VARIABLES = new LinkedHashMap<>();
+    private static final Map<Integer, Expression> DEFAULT_EXPRESSIONS = new LinkedHashMap<>();
 	
 	@Setter
 	@Getter
@@ -137,31 +137,34 @@ public class Curta {
         return variables.containsKey(id);
     }
 
-    public void clear() {
-        functions = new LinkedHashMap<String, Function>(DEFAULT_FUNCTIONS);
-        variables = new LinkedHashMap<String, Object>(DEFAULT_VARIABLES);
-        expressions = new LinkedHashMap<Integer, Expression>(DEFAULT_EXPRESSIONS);
+    public final void clear() {
+		
+        functions = new LinkedHashMap<>(DEFAULT_FUNCTIONS);
+        variables = new LinkedHashMap<>(DEFAULT_VARIABLES);
+        expressions = new LinkedHashMap<>(DEFAULT_EXPRESSIONS);
     }
 
     public Object eval(File file) throws ParseException, FileNotFoundException {
+		
         CurtaParser parser = new CurtaParser(new FileInputStream(file));
 		return eval(parser);
     }
 	
 	public Object eval(String source) throws ParseException {
+		
         CurtaParser parser = new CurtaParser(new java.io.StringReader(source));
         return eval(parser);
     }
 
 	private Object eval(CurtaParser parser) throws ParseException {
+		
 		CurtaNode root = parser.ast();
 			root.addOption(OPTION_FAIL_ON_UNKNOWN_VARIABLE, failOnUnknownVariable);
 		return root.eval(variables, functions, expressions);
 	}
 
-   
-
     public void setExpression(Operator operator, Expression expression) {
+		
         expressions.put(operator.type, expression);
     }
 }

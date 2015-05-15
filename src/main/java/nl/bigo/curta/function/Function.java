@@ -56,7 +56,7 @@ public abstract class Function {
 
     protected final List<Double> getNumbers(Object... params) {
 
-        List<Double> numbers = new ArrayList<Double>();
+        List<Double> numbers = new ArrayList<>();
 
         if(params != null) {
 
