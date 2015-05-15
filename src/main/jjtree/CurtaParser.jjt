@@ -51,13 +51,15 @@ TOKEN :
   |  < Return     : "return" >
   |  < NumDouble  : (<Digit>)+ "." (<Digit>)+ | "." (<Digit>)+ >
   |  < NumLong    : (<Digit>)+ >
-  |  < Identifier : ("_" | <Letter>) ("_" | <AlphaNum>)* >
+  |  < Identifier : ("_" | <Letter>) ("_" | <AlphaNum> | <Dot>)* >
+  |  < QuotedString: "\"" (~["\""])+ "\"" >
 }
 
 TOKEN :
 {
      < #Digit    : ["0"-"9"] >
   |  < #Letter   : ["a"-"z","A"-"Z"] >
+  |  < #Dot		 : ["."] >
   |  < #AlphaNum : <Letter> | <Digit> >
 }
 
@@ -212,6 +214,7 @@ private void atom() :
      function()
   |  id()
   |  num()
+  |  string()
   |  _null()
   |  bool()
   |  <OParen> expr() <CParen>
@@ -230,6 +233,12 @@ private void num() #Num :
 {
      t=<NumDouble> {jjtThis.value = Double.valueOf(t.image);}
   |  t=<NumLong>   {jjtThis.value = Long.valueOf(t.image);}
+}
+
+private void string() #String :
+{ Token t; }
+{
+    t=<QuotedString> {jjtThis.value = t.image.substring(1, t.image.length() - 1);}
 }
 
 private void _null() #Null :

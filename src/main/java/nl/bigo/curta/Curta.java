@@ -8,12 +8,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(chain= true)
 public class Curta {
+	
+	public static final String OPTION_FAIL_ON_UNKNOWN_VARIABLE = "OPTION_FAIL_ON_UNKNOWN_VARIABLE";
+	public static final Boolean OPTION_DEFAULT_FAIL_ON_UKNOWN_VARIABLE = Boolean.TRUE;
 
     private static final Map<String, Function> DEFAULT_FUNCTIONS = new LinkedHashMap<String, Function>();
     private static final Map<String, Object> DEFAULT_VARIABLES = new LinkedHashMap<String, Object>();
     private static final Map<Integer, Expression> DEFAULT_EXPRESSIONS = new LinkedHashMap<Integer, Expression>();
+	
+	@Setter
+	@Getter
+	private boolean failOnUnknownVariable = OPTION_DEFAULT_FAIL_ON_UKNOWN_VARIABLE;
 
     static {
 
@@ -133,20 +144,22 @@ public class Curta {
     }
 
     public Object eval(File file) throws ParseException, FileNotFoundException {
-
         CurtaParser parser = new CurtaParser(new FileInputStream(file));
-        CurtaNode root = parser.ast();
-
-        return root.eval(variables, functions, expressions);
+		return eval(parser);
     }
-
-    public Object eval(String source) throws ParseException {
-
+	
+	public Object eval(String source) throws ParseException {
         CurtaParser parser = new CurtaParser(new java.io.StringReader(source));
-        CurtaNode root = parser.ast();
-
-        return root.eval(variables, functions, expressions);
+        return eval(parser);
     }
+
+	private Object eval(CurtaParser parser) throws ParseException {
+		CurtaNode root = parser.ast();
+			root.addOption(OPTION_FAIL_ON_UNKNOWN_VARIABLE, failOnUnknownVariable);
+		return root.eval(variables, functions, expressions);
+	}
+
+   
 
     public void setExpression(Operator operator, Expression expression) {
         expressions.put(operator.type, expression);

@@ -1,5 +1,6 @@
 package nl.bigo.curta.expression;
 
+import nl.bigo.curta.Curta;
 import nl.bigo.curta.CurtaNode;
 import nl.bigo.curta.CurtaParserTreeConstants;
 import nl.bigo.curta.ParseException;
@@ -7,6 +8,7 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class IdExpressionTest extends ExpressionTestBase {
@@ -47,5 +49,13 @@ public class IdExpressionTest extends ExpressionTestBase {
         CurtaNode ast = super.getExpressionRoot("x");
         assertThat(ast.treeType, is(type));
         expression.eval(ast, super.variables, super.functions, super.expressions);
+    }
+	
+	@Test
+    public void testEvalInvalidButCurtaAllows() throws ParseException {
+		Curta curta = new Curta();
+		curta.setFailOnUnknownVariable(false);
+		Object eval = curta.eval("x");
+		assertNull(eval);
     }
 }

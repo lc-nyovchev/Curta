@@ -1,5 +1,6 @@
 package nl.bigo.curta;
 
+import java.util.HashMap;
 import nl.bigo.curta.expression.Expression;
 import nl.bigo.curta.function.Function;
 import java.util.Map;
@@ -7,10 +8,12 @@ import java.util.Map;
 public class CurtaNode extends SimpleNode implements CurtaParserTreeConstants {
 
     public final int treeType;
-
+	public final Map<String, Object> options;
+	
     public CurtaNode(int type) {
         super(type);
         this.treeType = type;
+		this.options = new HashMap<String, Object>();
     }
 
     public Object eval(Map<String, Object> vars, Map<String, Function> functions, Map<Integer, Expression> expressions) {
@@ -29,6 +32,7 @@ public class CurtaNode extends SimpleNode implements CurtaParserTreeConstants {
 
             case JJTNUM:
             case JJTBOOL:
+			case JJTSTRING:
             case JJTNULL:
                 return ast.value;
 
@@ -41,5 +45,21 @@ public class CurtaNode extends SimpleNode implements CurtaParserTreeConstants {
 
                 return expression.eval(ast, vars, functions, expressions);
         }
-    }
+	}
+	
+	public void addOption(String optionName, Object optionValue){
+		options.put(optionName, optionValue);
+	}
+	
+	public Object getOption(String optionName){
+		return options.get(optionName);
+	}
+	
+	public CurtaNode getRoot(){
+		CurtaNode p = (CurtaNode) this.parent;
+		if (p.treeType == JJTROOT ){
+			return p;
+		}
+		return p.getRoot();
+	}
 }
