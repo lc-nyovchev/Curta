@@ -10,6 +10,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class IdExpressionTest extends ExpressionTestBase {
 
@@ -57,5 +58,13 @@ public class IdExpressionTest extends ExpressionTestBase {
 		curta.setFailOnUnknownVariable(false);
 		Object eval = curta.eval("x");
 		assertNull(eval);
+    }
+	
+	@Test
+    public void testString() throws ParseException {
+		Curta curta = new Curta();
+		curta.addVariable("someVar", "someQuotedValue");
+		Object eval = curta.eval("someVar == \"someQuotedValue\"");
+		assertEquals(eval, Boolean.TRUE);
     }
 }

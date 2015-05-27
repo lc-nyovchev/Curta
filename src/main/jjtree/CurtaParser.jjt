@@ -52,7 +52,7 @@ TOKEN :
   |  < NumDouble  : (<Digit>)+ "." (<Digit>)+ | "." (<Digit>)+ >
   |  < NumLong    : (<Digit>)+ >
   |  < Identifier : ("_" | <Letter>) ("_" | <AlphaNum> | <Dot>)* >
-  |  < QuotedString: "\"" (~["\""])+ "\"" >
+  |  < QuotedString: "\"" (~["\"","\\","\n","\r"] | "\\" (["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"]))* "\"" >
 }
 
 TOKEN :
